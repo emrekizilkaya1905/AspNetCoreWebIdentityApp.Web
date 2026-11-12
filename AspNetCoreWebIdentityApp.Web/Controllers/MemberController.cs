@@ -64,5 +64,9 @@ namespace AspNetCoreWebIdentityApp.Web.Controllers
             TempData["SuccessMessage"] = "Password changed successfully.";
             return RedirectToAction("Index", "Member");
         }
+        public IActionResult UserEdit()
+        {
+            return View();
+        }
     }
 }
