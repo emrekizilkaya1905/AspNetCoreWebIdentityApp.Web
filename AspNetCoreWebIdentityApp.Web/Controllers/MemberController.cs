@@ -1,9 +1,11 @@
-﻿using AspNetCoreWebIdentityApp.Web.Extensions;
+using AspNetCoreWebIdentityApp.Web.Extensions;
 using AspNetCoreWebIdentityApp.Web.Models;
 using AspNetCoreWebIdentityApp.Web.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Globalization;
 
 namespace AspNetCoreWebIdentityApp.Web.Controllers
 {
@@ -64,9 +66,29 @@ namespace AspNetCoreWebIdentityApp.Web.Controllers
             TempData["SuccessMessage"] = "Password changed successfully.";
             return RedirectToAction("Index", "Member");
         }
-        public IActionResult UserEdit()
+        [HttpGet]
+        public async Task<IActionResult> UserEdit()
         {
-            return View();
+            var currentUser = await _userManager.GetUserAsync(User);
+            if (currentUser is null)
+            {
+                return Challenge();
+            }
+
+            var userEditViewModel = new UserEditViewModel
+            {
+                UserName = currentUser.UserName ?? string.Empty,
+                Email = currentUser.Email ?? string.Empty,
+                Phone = currentUser.PhoneNumber ?? string.Empty,
+                City = currentUser.City,
+                BirthDate = currentUser.BirthDate,
+                Gender = currentUser.Gender
+            };
+
+
+            ViewBag.gender = new SelectList(Enum.GetNames(typeof(Gender)));
+
+            return View(userEditViewModel);
         }
     }
 }
