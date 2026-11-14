@@ -10,5 +10,9 @@ namespace AspNetCoreWebIdentityApp.Web.Extensions
         {
            errors.ForEach(error => modelState.AddModelError(string.Empty, error));
         }
+        public static void AddModelErrorList(this ModelStateDictionary modelState, IEnumerable<IdentityError> errors)
+        {
+            errors.ToList().ForEach(error => modelState.AddModelError(string.Empty, error.Description));
+        }
     }
 }

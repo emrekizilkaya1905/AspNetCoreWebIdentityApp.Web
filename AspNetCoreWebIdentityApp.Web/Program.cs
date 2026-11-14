@@ -2,13 +2,26 @@ using AspNetCoreWebIdentityApp.Web.Extensions;
 using AspNetCoreWebIdentityApp.Web.Models;
 using AspNetCoreWebIdentityApp.Web.OptionModels;
 using AspNetCoreWebIdentityApp.Web.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<AppDbContext>(options =>options.UseSqlServer(builder.Configuration.GetConnectionString("SqlCon")));
+
+builder.Services.Configure<SecurityStampValidatorOptions>(options =>
+{
+    // SecurityStampValidatorOptions ayarları, kullanıcının kimlik doğrulama durumunu kontrol etmek için kullanılır.
+    // ValidateInterval özelliği, kullanıcının kimlik doğrulama durumunun ne sıklıkla kontrol edileceğini belirler.
+    // Bu sayede, kullanıcı oturumunun geçerliliği düzenli aralıklarla kontrol edilir ve gerekirse oturum sonlandırılır.
+    options.ValidationInterval = TimeSpan.FromMinutes(30);
+});
+
+builder.Services.AddSingleton<IFileProvider>(new PhysicalFileProvider(Directory.GetCurrentDirectory()));
+
 
 builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
 builder.Services.AddScoped<IEmailService, EmailService>();

@@ -363,3 +363,6 @@ MigrationBackup/
 FodyWeavers.xsd
 # Local markdown notes
 Mds/
+
+# Uploaded profile pictures
+/AspNetCoreWebIdentityApp.Web/wwwroot/userpictures/

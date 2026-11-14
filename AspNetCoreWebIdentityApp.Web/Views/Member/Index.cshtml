@@ -13,6 +13,7 @@
                         <thead class="table-success">
                             <tr>
                                 <th scope="col">#</th>
+                                <th scope="col">Picture</th>
                                 <th scope="col">Username</th>
                                 <th scope="col">Email</th>
                                 <th scope="col">Phone</th>
@@ -21,6 +22,9 @@
                         <tbody>
                             <tr>
                                 <th scope="row">1</th>
+                                <td>
+                                    <user-picture-thumbnail picture-url="@Model?.PictureUrl" />
+                                </td>
                                 <td class="text-break">@(Model?.UserName ?? "Not provided")</td>
                                 <td class="text-break">@(Model?.Email ?? "Not provided")</td>
                                 <td>@(Model?.PhoneNumber ?? "Not provided")</td>
