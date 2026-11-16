@@ -1,26 +1,66 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
 @model List<AdminModel.UserViewModel>
+@{
+    ViewData["Title"] = "Users";
+}
 
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th scope="col">Id</th>
-            <th scope="col">User Name</th>
-            <th scope="col">Email</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var user in Model)
-        {
-            <tr>
-                <td>@user.Id</td>
-                <td>@user.Name</td>
-                <td>@user.Email</td>
-            </tr>
-        }
-    </tbody>
-</table>
+<div class="py-4">
+    <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+        <div>
+            <p class="text-success fw-semibold small text-uppercase mb-2">Administration</p>
+            <h1 class="h2 fw-bold mb-1">Users</h1>
+            <p class="text-muted mb-0">An overview of your registered accounts.</p>
+        </div>
+        <span class="badge rounded-pill bg-success-subtle text-success-emphasis border border-success-subtle px-3 py-2">
+            @Model.Count registered users
+        </span>
+    </div>
+
+    <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+        <div class="card-header bg-success-subtle border-0 px-4 py-3">
+            <h2 class="h6 text-success-emphasis fw-semibold mb-0">User directory</h2>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <caption class="visually-hidden">Registered users with their username, email address and account ID.</caption>
+                <thead class="table-light">
+                    <tr>
+                        <th scope="col" class="ps-4 py-3 text-secondary small">#</th>
+                        <th scope="col" class="py-3 text-secondary small">User</th>
+                        <th scope="col" class="py-3 text-secondary small">Email address</th>
+                        <th scope="col" class="pe-4 py-3 text-secondary small">Account ID</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Count == 0)
+                    {
+                        <tr>
+                            <td colspan="4" class="text-center py-5">
+                                <p class="fw-semibold mb-1">No users yet</p>
+                                <p class="text-muted small mb-0">Registered accounts will appear here.</p>
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {
+                        @for (var index = 0; index < Model.Count; index++)
+                        {
+                            var user = Model[index];
+                            var initial = string.IsNullOrWhiteSpace(user.Name) ? "?" : user.Name.Substring(0, 1).ToUpperInvariant();
+                            <tr>
+                                <th scope="row" class="ps-4 py-3 text-muted fw-normal">@(index + 1)</th>
+                                <td class="py-3">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <span class="d-inline-flex align-items-center justify-content-center rounded-circle bg-success-subtle text-success-emphasis fw-bold flex-shrink-0" style="width: 42px; height: 42px;" aria-hidden="true">@initial</span>
+                                        <span class="fw-semibold text-break">@(user.Name ?? "Not provided")</span>
+                                    </div>
+                                </td>
+                                <td class="py-3 text-break">@(user.Email ?? "Not provided")</td>
+                                <td class="pe-4 py-3"><span class="font-monospace text-muted small text-break">@user.Id</span></td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
