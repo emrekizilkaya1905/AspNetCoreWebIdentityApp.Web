@@ -47,6 +47,7 @@ namespace AspNetCoreWebIdentityApp.Web.Areas.Admin.Controllers
                     return View();
                 }
             }
+            TempData["SuccessMessage"] = "Role created successfully.";
             return RedirectToAction(nameof(RolesController.Index));
         }
         public async Task<IActionResult> RoleUpdate(string id)
@@ -88,6 +89,23 @@ namespace AspNetCoreWebIdentityApp.Web.Areas.Admin.Controllers
 
             TempData["SuccessMessage"] = "Role updated successfully.";
             return RedirectToAction(nameof(Index));
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RoleDelete(string id)
+        {
+            var roleToDelete = await _roleManager.FindByIdAsync(id);
+            if (roleToDelete == null)
+            {
+                throw new Exception("Role not found");
+            }
+            var result = await _roleManager.DeleteAsync(roleToDelete);
+            if (!result.Succeeded)
+            {
+                throw new Exception(result.Errors.Select(x=>x.Description).First());
+            }
+            TempData["SuccessMessage"] = "Role deleted successfully.";
+            return RedirectToAction(nameof(RolesController.Index));
         }
     }
 }
