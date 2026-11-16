@@ -102,10 +102,41 @@ namespace AspNetCoreWebIdentityApp.Web.Areas.Admin.Controllers
             var result = await _roleManager.DeleteAsync(roleToDelete);
             if (!result.Succeeded)
             {
-                throw new Exception(result.Errors.Select(x=>x.Description).First());
+                throw new Exception(result.Errors.Select(x => x.Description).First());
             }
             TempData["SuccessMessage"] = "Role deleted successfully.";
             return RedirectToAction(nameof(RolesController.Index));
+        }
+
+        public async Task<IActionResult> AssignRoleToUser(string id)
+        {
+            var currentUser = await _userManager.FindByIdAsync(id);
+            if (currentUser == null)
+            {
+                return NotFound();
+            }
+
+            var roles = await _roleManager.Roles.ToListAsync();
+            var userRoles = await _userManager.GetRolesAsync(currentUser);
+            var roleViewModelList = new List<AssignRoleToUserViewModel>();
+
+            foreach (var role in roles)
+            {
+                var assignRoleToUserViewModel = new AssignRoleToUserViewModel
+                {
+                    Id = role.Id,
+                    Name = role.Name!,
+                };
+                if (userRoles.Contains(role.Name!))
+                {
+                    assignRoleToUserViewModel.Exist = true;
+                }
+                roleViewModelList.Add(assignRoleToUserViewModel);
+            }
+
+            ViewBag.UserId = currentUser.Id;
+            ViewBag.UserName = currentUser.UserName;
+            return View(roleViewModelList);
         }
     }
 }
