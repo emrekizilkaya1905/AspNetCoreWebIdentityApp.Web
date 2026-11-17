@@ -47,6 +47,7 @@
                                 <p class="text-muted small mb-0">Registered accounts will appear here.</p>
                             </td>
                         </tr>
+
                     }
                     else
                     {
@@ -60,6 +61,7 @@
                                     <div class="d-flex align-items-center gap-3">
                                         <span class="d-inline-flex align-items-center justify-content-center rounded-circle bg-success-subtle text-success-emphasis fw-bold flex-shrink-0" style="width: 42px; height: 42px;" aria-hidden="true">@initial</span>
                                         <span class="fw-semibold text-break">@(user.Name ?? "Not provided")</span>
+                                        <user-role-names user-id="@user.Id"></user-role-names>
                                     </div>
                                 </td>
                                 <td class="py-3 text-break">@(user.Email ?? "Not provided")</td>

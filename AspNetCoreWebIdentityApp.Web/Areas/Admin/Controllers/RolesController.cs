@@ -1,6 +1,7 @@
 using AspNetCoreWebIdentityApp.Web.Areas.Admin.Models;
 using AspNetCoreWebIdentityApp.Web.Extensions;
 using AspNetCoreWebIdentityApp.Web.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -18,6 +19,7 @@ namespace AspNetCoreWebIdentityApp.Web.Areas.Admin.Controllers
             _userManager = userManager;
             _roleManager = roleManager;
         }
+        [Authorize(Roles = "admin,role-action")]
         public async Task<IActionResult> Index()
         {
             var roles = await _roleManager.Roles.Select(r => new RoleViewModel
@@ -28,13 +30,14 @@ namespace AspNetCoreWebIdentityApp.Web.Areas.Admin.Controllers
 
             return View(roles);
         }
-
+        [Authorize(Roles = "admin,role-action")]
         public IActionResult RoleCreate()
         {
 
             return View();
         }
         [HttpPost]
+        [Authorize(Roles = "admin,role-action")]
         public async Task<IActionResult> RoleCreate(RoleCreateViewModel request)
         {
             if (ModelState.IsValid)
@@ -50,6 +53,7 @@ namespace AspNetCoreWebIdentityApp.Web.Areas.Admin.Controllers
             TempData["SuccessMessage"] = "Role created successfully.";
             return RedirectToAction(nameof(RolesController.Index));
         }
+        [Authorize(Roles = "admin,role-action")]
         public async Task<IActionResult> RoleUpdate(string id)
         {
             var roleToUpdate = await _roleManager.FindByIdAsync(id);
@@ -66,6 +70,7 @@ namespace AspNetCoreWebIdentityApp.Web.Areas.Admin.Controllers
             });
         }
         [HttpPost]
+        [Authorize(Roles = "admin,role-action")]
         public async Task<IActionResult> RoleUpdate(RoleUpdateViewModel request)
         {
             if (!ModelState.IsValid)
@@ -92,6 +97,7 @@ namespace AspNetCoreWebIdentityApp.Web.Areas.Admin.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "admin,role-action")]
         public async Task<IActionResult> RoleDelete(string id)
         {
             var roleToDelete = await _roleManager.FindByIdAsync(id);
