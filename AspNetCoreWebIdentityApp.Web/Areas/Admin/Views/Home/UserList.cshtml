@@ -3,6 +3,13 @@
     ViewData["Title"] = "Users";
 }
 
+@if (TempData["SuccessMessage"] is string successMessage)
+{
+    <div class="alert alert-success alert-dismissible fade show mt-4" role="alert">
+        @successMessage
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
 <div class="py-4">
     <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
         <div>
@@ -27,14 +34,15 @@
                         <th scope="col" class="ps-4 py-3 text-secondary small">#</th>
                         <th scope="col" class="py-3 text-secondary small">User</th>
                         <th scope="col" class="py-3 text-secondary small">Email address</th>
-                        <th scope="col" class="pe-4 py-3 text-secondary small">Account ID</th>
+                        <th scope="col" class="py-3 text-secondary small">Account ID</th>
+                        <th scope="col" class="pe-4 py-3 text-secondary small text-end">Role Transactions</th>
                     </tr>
                 </thead>
                 <tbody>
                     @if (Model.Count == 0)
                     {
                         <tr>
-                            <td colspan="4" class="text-center py-5">
+                            <td colspan="5" class="text-center py-5">
                                 <p class="fw-semibold mb-1">No users yet</p>
                                 <p class="text-muted small mb-0">Registered accounts will appear here.</p>
                             </td>
@@ -55,7 +63,8 @@
                                     </div>
                                 </td>
                                 <td class="py-3 text-break">@(user.Email ?? "Not provided")</td>
-                                <td class="pe-4 py-3"><span class="font-monospace text-muted small text-break">@user.Id</span></td>
+                                <td class="py-3"><span class="font-monospace text-muted small text-break">@user.Id</span></td>
+                                <td class="pe-4 py-3 text-end"><a class="btn btn-outline-success btn-sm text-nowrap" asp-area="Admin" asp-controller="Roles" asp-action="AssignRoleToUser" asp-route-id="@user.Id">Rol Ata</a></td>
                             </tr>
                         }
                     }

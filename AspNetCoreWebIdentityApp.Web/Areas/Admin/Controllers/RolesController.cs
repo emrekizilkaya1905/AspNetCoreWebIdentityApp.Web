@@ -138,5 +138,29 @@ namespace AspNetCoreWebIdentityApp.Web.Areas.Admin.Controllers
             ViewBag.UserName = currentUser.UserName;
             return View(roleViewModelList);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> AssignRoleToUser(List<AssignRoleToUserViewModel> requestList, string userId)
+        {
+            var currentUser = await _userManager.FindByIdAsync(userId);
+            if (currentUser == null)
+            {
+                return NotFound();
+            }
+            var userRoles = await _userManager.GetRolesAsync(currentUser);
+            foreach (var role in requestList)
+            {
+                if (role.Exist && !userRoles.Contains(role.Name))
+                {
+                    await _userManager.AddToRoleAsync(currentUser, role.Name);
+                }
+                else if (!role.Exist && userRoles.Contains(role.Name))
+                {
+                    await _userManager.RemoveFromRoleAsync(currentUser, role.Name);
+                }
+            }
+            TempData["SuccessMessage"] = "Roles updated successfully.";
+            return RedirectToAction(nameof(HomeController.UserList), "Home", new { area = "Admin" });
+        }
     }
 }

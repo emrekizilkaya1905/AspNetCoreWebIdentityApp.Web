@@ -1,5 +1,47 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+@model List<AdminModel.AssignRoleToUserViewModel>
 @{
+    ViewData["Title"] = "Assign Roles";
 }
+
+<div class="row justify-content-center mt-4">
+    <div class="col-md-8 col-lg-6">
+        <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+            <div class="card-header bg-success text-white p-4 border-0">
+                <h3 class="mb-1">Assign Roles</h3>
+                <p class="mb-0">Manage roles for @ViewBag.UserName.</p>
+            </div>
+            <div class="card-body p-4">
+                <form asp-area="Admin" asp-controller="Roles" asp-action="AssignRoleToUser" method="post">
+                    <input type="hidden" name="userId" value="@ViewBag.UserId" />
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                    @if (Model.Count == 0)
+                    {
+                        <div class="alert alert-info">No roles available. Create a role first.</div>
+                    }
+
+                    @for (var i = 0; i < Model.Count; i++)
+                    {
+                        
+                        <input asp-for="@Model[i].Id" type="hidden" />
+                        <input asp-for="@Model[i].Name" type="hidden" />
+                        <div class="border rounded-3 p-3 mb-3">
+                            <div class="form-check">
+                                <input asp-for="@Model[i].Exist" class="form-check-input" />
+                                <label asp-for="@Model[i].Exist" class="form-check-label fw-semibold">@Model[i].Name</label>
+                            </div>
+                        </div>
+                    }
+
+                    <div class="d-flex justify-content-between align-items-center gap-3 mt-4">
+                        <a asp-area="Admin" asp-controller="Home" asp-action="UserList" class="btn btn-outline-secondary">Back to Users</a>
+                        @if (Model.Count > 0)
+                        {
+                            <button type="submit" class="btn btn-success px-4">Save Roles</button>
+                        }
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
