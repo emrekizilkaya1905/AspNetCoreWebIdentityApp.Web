@@ -144,5 +144,15 @@ namespace AspNetCoreWebIdentityApp.Web.Controllers
             };
             return View(userEditViewModel);
         }
+
+        // Uyelerin goremedikleri sayfa icin AccessDenied sayfasina yonlendirme yapilmasi icin kullanilir.
+
+        public  IActionResult AccessDenied(string ReturnUrl)
+        {
+            string message  =string.Empty;
+            message= "Your account doesn't have the required role to access this page. If you think this is a mistake, please contact your administrator.";
+            ViewBag.Message = message;
+            return View();
+        }
     }
 }
