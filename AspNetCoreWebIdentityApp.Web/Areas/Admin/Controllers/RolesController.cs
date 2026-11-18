@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AspNetCoreWebIdentityApp.Web.Areas.Admin.Controllers
 {
+
+    [Authorize(Roles = "admin")]
     [Area("Admin")]
     public class RolesController : Controller
     {
