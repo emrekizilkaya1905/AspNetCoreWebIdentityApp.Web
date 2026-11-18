@@ -1,7 +1,9 @@
+using AspNetCoreWebIdentityApp.Web.ClaimProviders;
 using AspNetCoreWebIdentityApp.Web.Extensions;
 using AspNetCoreWebIdentityApp.Web.Models;
 using AspNetCoreWebIdentityApp.Web.OptionModels;
 using AspNetCoreWebIdentityApp.Web.Services;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
@@ -25,6 +27,7 @@ builder.Services.AddSingleton<IFileProvider>(new PhysicalFileProvider(Directory.
 
 builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
 builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<IClaimsTransformation, UserClaimProvider>();
 builder.Services.AddIdentiyWithExt();
 // Write cookie options
 builder.Services.ConfigureApplicationCookie(options =>
