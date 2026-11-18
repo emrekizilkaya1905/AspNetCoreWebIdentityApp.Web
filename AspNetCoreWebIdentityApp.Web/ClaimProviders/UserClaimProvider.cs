@@ -1,4 +1,4 @@
-﻿using AspNetCoreWebIdentityApp.Web.Models;
+using AspNetCoreWebIdentityApp.Web.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
@@ -25,7 +25,7 @@ namespace AspNetCoreWebIdentityApp.Web.ClaimProviders
                 return principal;
             }
 
-            if (String.IsNullOrEmpty(currentUser.City))
+            if (!string.IsNullOrEmpty(currentUser.City))
             {
                 if(!principal.HasClaim(c => c.Type == "city"))
                 {

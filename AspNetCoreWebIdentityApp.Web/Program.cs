@@ -29,6 +29,16 @@ builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("Emai
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IClaimsTransformation, UserClaimProvider>();
 builder.Services.AddIdentiyWithExt();
+// Define policy
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("StockholmPolicy", policy =>
+    {
+        policy.RequireClaim("city", "Stockholm");
+    });
+});
+
+
 // Write cookie options
 builder.Services.ConfigureApplicationCookie(options =>
 {

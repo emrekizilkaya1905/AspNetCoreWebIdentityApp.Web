@@ -155,6 +155,11 @@ namespace AspNetCoreWebIdentityApp.Web.Controllers
             return View();
         }
 
+        [Authorize(Policy = "StockholmPolicy")]
+        public IActionResult StockholmPage()
+        {
+            return View();
+        }
         public async Task<IActionResult> Claims()
         {
             var userClaimList = User.Claims.Select(c => new ClaimViewModel

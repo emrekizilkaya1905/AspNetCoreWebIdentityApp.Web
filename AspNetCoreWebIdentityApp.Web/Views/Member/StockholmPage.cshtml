@@ -1,0 +1,37 @@
+@{
+    ViewData["Title"] = "Stockholm";
+}
+
+<div class="row justify-content-center py-5">
+    <div class="col-lg-9">
+        <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+            <div class="card-header bg-success text-white border-0 p-4 p-md-5">
+                <span class="badge bg-white text-success rounded-pill px-3 py-2 mb-3">Stockholm Members</span>
+                <h1 class="display-6 fw-bold mb-2">Welcome to Stockholm</h1>
+                <p class="mb-0">A special space for our members in Stockholm.</p>
+            </div>
+            <div class="card-body p-4 p-md-5">
+                <h2 class="h4 mb-3">Hello, @User.Identity?.Name!</h2>
+                <p class="text-muted mb-4">Welcome to your city page. You can explore your account and review your membership information using the links below.</p>
+                <div class="row g-3 mb-4">
+                    <div class="col-sm-6">
+                        <div class="bg-light rounded-3 p-4 h-100">
+                            <p class="small text-muted mb-1">Your community</p>
+                            <h3 class="h5 text-success mb-0">Stockholm</h3>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="bg-light rounded-3 p-4 h-100">
+                            <p class="small text-muted mb-1">Member area</p>
+                            <h3 class="h5 text-success mb-0">Welcome aboard</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex flex-wrap gap-2">
+                    <a asp-area="" asp-controller="Member" asp-action="Index" class="btn btn-success px-4">My Account</a>
+                    <a asp-area="" asp-controller="Home" asp-action="Index" class="btn btn-outline-success px-4">Back to Homepage</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
