@@ -1,0 +1,56 @@
+@model List<ClaimViewModel>
+@{
+    ViewData["Title"] = "My Claims";
+}
+
+<div class="card border-0 shadow-sm rounded-4 overflow-hidden mt-4">
+    <div class="card-header bg-success text-white border-0 p-4">
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+            <div>
+                <h1 class="h3 mb-1">My Claims</h1>
+                <p class="mb-0">Identity information associated with your current session.</p>
+            </div>
+            <a asp-area="" asp-controller="Member" asp-action="Index" class="btn btn-light text-success fw-semibold">Back to My Account</a>
+        </div>
+    </div>
+    <div class="card-body p-0">
+        <div class="d-flex justify-content-between align-items-center px-4 py-3 border-bottom">
+            <span class="fw-semibold">Claim Details</span>
+            <span class="badge bg-success rounded-pill px-3 py-2">@Model.Count claims</span>
+        </div>
+        @if (Model.Count == 0)
+        {
+            <div class="text-center p-5">
+                <h2 class="h5">No claims found</h2>
+                <p class="text-muted mb-0">There are no claims available for your current session.</p>
+            </div>
+        }
+        else
+        {
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <caption class="visually-hidden">Claim types, values and issuers for the current user.</caption>
+                    <thead class="table-light">
+                        <tr>
+                            <th scope="col" class="ps-4 py-3">#</th>
+                            <th scope="col" class="py-3">Type</th>
+                            <th scope="col" class="py-3">Value</th>
+                            <th scope="col" class="pe-4 py-3">Issuer</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (var i = 0; i < Model.Count; i++)
+                        {
+                            <tr>
+                                <th scope="row" class="ps-4 py-3 text-muted">@(i + 1)</th>
+                                <td class="py-3 text-break"><span class="small">@Model[i].Type</span></td>
+                                <td class="py-3 text-break fw-semibold text-success">@Model[i].Value</td>
+                                <td class="pe-4 py-3 text-break text-muted">@Model[i].Issuer</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+</div>

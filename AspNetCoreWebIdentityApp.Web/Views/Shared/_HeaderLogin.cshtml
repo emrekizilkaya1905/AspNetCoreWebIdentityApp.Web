@@ -7,6 +7,7 @@
         <ul class="dropdown-menu dropdown-menu-end shadow-sm" aria-labelledby="accountDropdown">
             <li>
                 <a class="dropdown-item" asp-controller="Member" asp-action="Index">Profile</a>
+                <a class="dropdown-item" asp-area="" asp-controller="Member" asp-action="Claims">My Claims</a>
                 @if (User.HasClaim(x => x.Type == ClaimTypes.Role && x.Value == "admin"))
                 {
                     <a class="dropdown-item" asp-area="Admin" asp-controller="Home" asp-action="Index">Admin Panel</a>

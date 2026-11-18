@@ -31,7 +31,7 @@ namespace AspNetCoreWebIdentityApp.Web.Controllers
                 UserName = currentUser.UserName,
                 Email = currentUser.Email,
                 PhoneNumber = currentUser.PhoneNumber,
-                PictureUrl=currentUser.Picture
+                PictureUrl = currentUser.Picture
             };
             return View(userViewModel);
         }
@@ -57,11 +57,11 @@ namespace AspNetCoreWebIdentityApp.Web.Controllers
             {
                 ModelState.AddModelError(string.Empty, "The current password is incorrect.");
                 return View();
-            }   
+            }
             var result = await _userManager.ChangePasswordAsync(currentUser!, request.PasswordOld, request.PasswordNew);
             if (!result.Succeeded)
             {
-                ModelState.AddModelErrorList(result.Errors.Select(e => e.Description).ToList());    
+                ModelState.AddModelErrorList(result.Errors.Select(e => e.Description).ToList());
                 return View();
             }
             //Security stampida degistirmemiz lazim.
@@ -98,7 +98,7 @@ namespace AspNetCoreWebIdentityApp.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> UserEdit(UserEditViewModel request)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return View();
             }
@@ -112,7 +112,7 @@ namespace AspNetCoreWebIdentityApp.Web.Controllers
             currentUser.City = request.City;
             currentUser.Gender = request.Gender;
 
-            if (request.Picture!=null && request.Picture.Length > 0)
+            if (request.Picture != null && request.Picture.Length > 0)
             {
                 var wwwrootFolder = _fileProvider.GetDirectoryContents("wwwroot");
                 var randomFileName = $"{Guid.NewGuid().ToString()}{Path.GetExtension(request.Picture.FileName)}";
@@ -121,9 +121,9 @@ namespace AspNetCoreWebIdentityApp.Web.Controllers
                 await request.Picture.CopyToAsync(stream);
                 currentUser.Picture = randomFileName;
             }
-           var updateToUserResult = await _userManager.UpdateAsync(currentUser);
+            var updateToUserResult = await _userManager.UpdateAsync(currentUser);
 
-            if(!updateToUserResult.Succeeded)
+            if (!updateToUserResult.Succeeded)
             {
                 ModelState.AddModelErrorList(updateToUserResult.Errors);
                 return View();
@@ -147,12 +147,24 @@ namespace AspNetCoreWebIdentityApp.Web.Controllers
 
         // Uyelerin goremedikleri sayfa icin AccessDenied sayfasina yonlendirme yapilmasi icin kullanilir.
 
-        public  IActionResult AccessDenied(string ReturnUrl)
+        public IActionResult AccessDenied(string ReturnUrl)
         {
-            string message  =string.Empty;
-            message= "Your account doesn't have the required role to access this page. If you think this is a mistake, please contact your administrator.";
+            string message = string.Empty;
+            message = "Your account doesn't have the required role to access this page. If you think this is a mistake, please contact your administrator.";
             ViewBag.Message = message;
             return View();
+        }
+
+        public async Task<IActionResult> Claims()
+        {
+            var userClaimList = User.Claims.Select(c => new ClaimViewModel
+            {
+                Issuer = c.Issuer,
+                Type = c.Type,
+                Value = c.Value
+            }).ToList();
+            return View(userClaimList);
+
         }
     }
 }
