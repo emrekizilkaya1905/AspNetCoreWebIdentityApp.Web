@@ -5,6 +5,7 @@ using AspNetCoreWebIdentityApp.Web.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using System.Security.Claims;
 
 namespace AspNetCoreWebIdentityApp.Web.Controllers
 {
@@ -50,14 +51,25 @@ namespace AspNetCoreWebIdentityApp.Web.Controllers
                 PhoneNumber = request.Phone
             }, request.PasswordConfirm);
 
-            if (identityResult.Succeeded)
+            if (!identityResult.Succeeded)
             {
-                TempData["SuccessMessage"] = "User Created Successfully";
+                //Ekledigimiz extension method sayesinde, ModelState.AddModelError() methodunu tek tek cagirmak yerine, bir listeyi tek seferde ekleyebiliriz.
+                ModelState.AddModelErrorList(identityResult.Errors.Select(e => e.Description).ToList());
                 return View();
             }
-            //Ekledigimiz extension method sayesinde, ModelState.AddModelError() methodunu tek tek cagirmak yerine, bir listeyi tek seferde ekleyebiliriz.
-            ModelState.AddModelErrorList(identityResult.Errors.Select(e => e.Description).ToList());
-            return View();
+
+            // Kullanici olusturulduktan sonra, kullaniciya 30 gunluk bir ExchangeExpire claim ekliyoruz.
+            var exchangeExpireClaim = new Claim("ExchangeExpire", DateTime.Now.AddDays(30).ToString());
+            var user = await _userManager.FindByEmailAsync(request.Email);
+            var claimResult = await _userManager.AddClaimAsync(user!, exchangeExpireClaim);
+
+            if (!claimResult.Succeeded)
+            {
+                ModelState.AddModelErrorList(claimResult.Errors.Select(e => e.Description).ToList());
+                return View();
+            }
+            TempData["SuccessMessage"] = "User Created Successfully";
+            return RedirectToAction(nameof(HomeController.SignUp));
         }
         public IActionResult SignIn()
         {
@@ -68,7 +80,7 @@ namespace AspNetCoreWebIdentityApp.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> SignIn(SignInViewModel model, string? returnUrl = null)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return View();
             }
@@ -147,7 +159,7 @@ namespace AspNetCoreWebIdentityApp.Web.Controllers
         {
             TempData["UserId"] = userId;
             TempData["Token"] = token;
-            
+
             return View();
         }
 
