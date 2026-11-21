@@ -2,8 +2,10 @@ using AspNetCoreWebIdentityApp.Web.ClaimProviders;
 using AspNetCoreWebIdentityApp.Web.Extensions;
 using AspNetCoreWebIdentityApp.Web.Models;
 using AspNetCoreWebIdentityApp.Web.OptionModels;
+using AspNetCoreWebIdentityApp.Web.Requirements;
 using AspNetCoreWebIdentityApp.Web.Services;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
@@ -12,7 +14,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddDbContext<AppDbContext>(options =>options.UseSqlServer(builder.Configuration.GetConnectionString("SqlCon")));
+builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("SqlCon")));
 
 builder.Services.Configure<SecurityStampValidatorOptions>(options =>
 {
@@ -29,12 +31,19 @@ builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("Emai
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IClaimsTransformation, UserClaimProvider>();
 builder.Services.AddIdentiyWithExt();
+builder.Services.AddScoped<IAuthorizationHandler, ExchangeExpireRequirementHandler>();
 // Define policy
 builder.Services.AddAuthorization(options =>
 {
+    // User tablosundaki city bilgisini claim olarak ekledik.
     options.AddPolicy("StockholmPolicy", policy =>
     {
         policy.RequireClaim("city", "Stockholm");
+    });
+    // Burada ise kendi olusturdugumuz ExchangeExpireRequirement'i kullanarak, kullanicinin yasini kontrol ediyoruz.
+    options.AddPolicy("ExchangePolicy", policy =>
+    {
+        policy.AddRequirements(new ExchangeExpireRequirement());
     });
 });
 

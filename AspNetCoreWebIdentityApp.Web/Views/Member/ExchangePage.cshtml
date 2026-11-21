@@ -1,0 +1,29 @@
+@{
+    ViewData["Title"] = "Exchange";
+}
+
+<div class="row justify-content-center py-5">
+    <div class="col-lg-8">
+        <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+            <div class="card-header bg-success text-white border-0 p-4 p-md-5">
+                <span class="badge rounded-pill bg-white text-success px-3 py-2 mb-3">Exchange Membership</span>
+                <h1 class="h2 mb-2">Welcome to Exchange</h1>
+                <p class="mb-0">Your member exchange area.</p>
+            </div>
+            <div class="card-body p-4 p-md-5">
+                <h2 class="h4 mb-3">Hello, @User.Identity?.Name!</h2>
+                <div class="alert alert-success mb-4" role="alert">
+                    Your exchange access is active. You can access this page while your membership is valid.
+                </div>
+                <div class="bg-light rounded-3 p-4 mb-4">
+                    <p class="text-muted small mb-1">Access expires</p>
+                    <p class="fw-semibold mb-0">@User.FindFirst("ExchangeExpire")?.Value</p>
+                </div>
+                <div class="d-flex flex-wrap gap-2">
+                    <a asp-area="" asp-controller="Member" asp-action="Index" class="btn btn-success px-4">My Account</a>
+                    <a asp-area="" asp-controller="Home" asp-action="Index" class="btn btn-outline-success px-4">Back to Homepage</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 
 namespace AspNetCoreWebIdentityApp.Web.Requirements
@@ -14,13 +14,13 @@ namespace AspNetCoreWebIdentityApp.Web.Requirements
             //Kullanicin once login olmasi gerekiyor. Bu yuzden claim kontrolu yapabiliriz.
 
             // null ise
-            if (!context.User.HasClaim(x => x.Type == "ExchangeExpireDate"))
+            if (!context.User.HasClaim(x => x.Type == "ExchangeExpire"))
             {
                 context.Fail();
                 return Task.CompletedTask;
             }
             // varsa
-            Claim exchangeExpireDate = context.User.FindFirst(x => x.Type == "ExchangeExpireDate")!;
+            Claim exchangeExpireDate = context.User.FindFirst(x => x.Type == "ExchangeExpire")!;
 
             if (DateTime.Now > Convert.ToDateTime(exchangeExpireDate.Value))
             {

@@ -155,6 +155,11 @@ namespace AspNetCoreWebIdentityApp.Web.Controllers
             return View();
         }
 
+        [Authorize(Policy = "ExchangePolicy")]
+        public IActionResult ExchangePage()
+        {
+            return View();
+        }
         [Authorize(Policy = "StockholmPolicy")]
         public IActionResult StockholmPage()
         {
