@@ -3,6 +3,7 @@ using AspNetCoreWebIdentityApp.Web.Extensions;
 using AspNetCoreWebIdentityApp.Web.Models;
 using AspNetCoreWebIdentityApp.Web.OptionModels;
 using AspNetCoreWebIdentityApp.Web.Requirements;
+using AspNetCoreWebIdentityApp.Web.Seeds;
 using AspNetCoreWebIdentityApp.Web.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
@@ -71,6 +72,12 @@ builder.Services.ConfigureApplicationCookie(options =>
 });
 
 var app = builder.Build();
+
+using(var scope = app.Services.CreateScope())
+{
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<AppRole>>();
+    await PermissionSeed.Seed(roleManager);
+};
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
