@@ -1,0 +1,26 @@
+@{
+    ViewData["Title"] = "Violence";
+}
+
+<div class="row justify-content-center py-5">
+    <div class="col-lg-8">
+        <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+            <div class="card-header bg-success text-white border-0 p-4 p-md-5">
+                <span class="badge rounded-pill bg-white text-success px-3 py-2 mb-3">18+ Member Area</span>
+                <h1 class="h2 mb-2">Violence</h1>
+                <p class="mb-0">Age-restricted content area.</p>
+            </div>
+            <div class="card-body p-4 p-md-5">
+                <h2 class="h4 mb-3">Welcome, @User.Identity?.Name!</h2>
+                <div class="alert alert-success mb-4" role="alert">
+                    Your age verification was successful. This page is available to members aged 18 and over.
+                </div>
+                <p class="text-muted mb-4">You have access to this member area based on the date of birth associated with your account.</p>
+                <div class="d-flex flex-wrap gap-2">
+                    <a asp-area="" asp-controller="Member" asp-action="Index" class="btn btn-success px-4">My Account</a>
+                    <a asp-area="" asp-controller="Home" asp-action="Index" class="btn btn-outline-success px-4">Back to Homepage</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

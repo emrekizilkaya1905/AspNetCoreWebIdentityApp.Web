@@ -166,6 +166,11 @@ namespace AspNetCoreWebIdentityApp.Web.Controllers
             return View();
         }
 
+        [Authorize(Policy = "ViolencePolicy")]
+        public IActionResult Violence()
+        {
+            return View();
+        }
         [Authorize(Policy = "ExchangePolicy")]
         public IActionResult ExchangePage()
         {

@@ -5,26 +5,28 @@ namespace AspNetCoreWebIdentityApp.Web.Requirements
 {
     public class ViolenceRequirement: IAuthorizationRequirement
     {
-        public int Age { get; set; }
+        public int ThresholdAge { get; set; }
     }
     public class ViolenceRequirementHandler : AuthorizationHandler<ViolenceRequirement>
     {
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, ViolenceRequirement requirement)
         {
-            if (!context.User.HasClaim(x => x.Type == "Birt"))
+            if (!context.User.HasClaim(x => x.Type == "birthdate"))
             {
                 context.Fail();
                 return Task.CompletedTask;
             }
-            Claim ageClaim = context.User.FindFirst(x => x.Type == "Age")!;
-            if (Convert.ToInt32(ageClaim.Value) >= requirement.Age)
-            {
-                context.Succeed(requirement);
-            }
-            else
+            Claim birthdateClaim = context.User.FindFirst(x => x.Type == "birthdate")!;
+            var today = DateTime.Today;
+            var birthdate = Convert.ToDateTime(birthdateClaim.Value);
+            var age = today.Year -  birthdate.Year;
+            if(birthdate > today.AddYears(-age)) age--;
+
+            if(requirement.ThresholdAge > age)
             {
                 context.Fail();
             }
+            context.Succeed(requirement);
             return Task.CompletedTask;
         }
     }
