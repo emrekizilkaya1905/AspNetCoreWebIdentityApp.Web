@@ -95,11 +95,6 @@ namespace AspNetCoreWebIdentityApp.Web.Controllers
             //Ispersistent: kullancinin bilgilerini cookie de tutulup tutmayacagini belirler. RememberMe: kullanici bilgilerini hatirlamasini(bizim belirledigimiz zure) istiyorsa true, istemiyorsa false olarak ayarlanir.
             //4.parametre : lockoutOnFailure: kullanici bilgilerini yanlis girerse, kullaniciya lockout uygulanip uygulanmayacagini belirler. Biz false olarak ayarladik.
             var signInResult = await _signInManager.PasswordSignInAsync(hasUser, model.Password, model.RememberMe, true);
-            if (signInResult.Succeeded)
-            {
-                return Redirect(returnUrl!);
-            }
-
             // Kullanici lockout olursa
             if (signInResult.IsLockedOut)
             {
@@ -107,16 +102,17 @@ namespace AspNetCoreWebIdentityApp.Web.Controllers
                 return View();
             }
 
-
-
-            //Ekledigimiz extension method sayesinde, ModelState.AddModelError() methodunu tek tek cagirmak yerine, bir listeyi tek seferde ekleyebiliriz.
-            ModelState.AddModelErrorList(new List<string> { "Email or Password is wrong " });
-
-            // Basarisiz giris sayisini gosterme
-            ModelState.AddModelErrorList(new List<string> { $"AccessFailedCount: {await _userManager.GetAccessFailedCountAsync(hasUser)}" });
-
-
-            return View();
+            if (!signInResult.Succeeded)
+            {
+                ModelState.AddModelErrorList(new List<string> { $"Email or Password is wrong ", $"AccessFailedCount: {await _userManager.GetAccessFailedCountAsync(hasUser)}" });
+                return View();
+            }
+            if (hasUser.BirthDate.HasValue)
+            {
+                await _signInManager.SignInWithClaimsAsync(hasUser, model.RememberMe, new[] { new Claim("birthdate", hasUser.BirthDate.Value.ToString()) });
+               
+            }
+            return Redirect(returnUrl!);
         }
 
         public IActionResult ForgetPassword()

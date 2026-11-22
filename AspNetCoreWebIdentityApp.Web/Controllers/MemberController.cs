@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.FileProviders;
 using System.Globalization;
+using System.Security.Claims;
 
 namespace AspNetCoreWebIdentityApp.Web.Controllers
 {
@@ -130,7 +131,17 @@ namespace AspNetCoreWebIdentityApp.Web.Controllers
             }
             await _userManager.UpdateSecurityStampAsync(currentUser);
             await _signInManager.SignOutAsync();
-            await _signInManager.SignInAsync(currentUser, true);
+            if (currentUser.BirthDate.HasValue)
+            {
+                await _signInManager.SignInWithClaimsAsync(currentUser, true, new[]
+                {
+                    new Claim("birthdate", currentUser.BirthDate.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture))
+                });
+            }
+            else
+            {
+                await _signInManager.SignInAsync(currentUser, true);
+            }
 
             TempData["SuccessMessage"] = "User information updated successfully.";
             var userEditViewModel = new UserEditViewModel
