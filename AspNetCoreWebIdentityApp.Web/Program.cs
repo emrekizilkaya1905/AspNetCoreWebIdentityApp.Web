@@ -1,10 +1,10 @@
 using AspNetCoreWebIdentityApp.Web.ClaimProviders;
 using AspNetCoreWebIdentityApp.Web.Extensions;
-using AspNetCoreWebIdentityApp.Web.Models;
-using AspNetCoreWebIdentityApp.Web.OptionModels;
-using AspNetCoreWebIdentityApp.Web.PermissionRoot;
+using AspNetCoreWebIdentityApp.Repository.Models;
+using AspNetCoreWebIdentityApp.Core.OptionModels;
+using AspNetCoreWebIdentityApp.Core.PermissionRoot;
 using AspNetCoreWebIdentityApp.Web.Requirements;
-using AspNetCoreWebIdentityApp.Web.Seeds;
+using AspNetCoreWebIdentityApp.Repository.Seeds;
 using AspNetCoreWebIdentityApp.Web.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
@@ -16,7 +16,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("SqlCon")));
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("SqlCon"),
+        sqlOptions => sqlOptions.MigrationsAssembly("AspNetCoreWebIdentityApp.Repository")));
 
 builder.Services.Configure<SecurityStampValidatorOptions>(options =>
 {

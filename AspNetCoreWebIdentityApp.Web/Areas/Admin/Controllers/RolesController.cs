@@ -1,6 +1,6 @@
 using AspNetCoreWebIdentityApp.Web.Areas.Admin.Models;
 using AspNetCoreWebIdentityApp.Web.Extensions;
-using AspNetCoreWebIdentityApp.Web.Models;
+using AspNetCoreWebIdentityApp.Repository.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
