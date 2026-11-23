@@ -5,12 +5,13 @@ using AspNetCoreWebIdentityApp.Core.OptionModels;
 using AspNetCoreWebIdentityApp.Core.PermissionRoot;
 using AspNetCoreWebIdentityApp.Web.Requirements;
 using AspNetCoreWebIdentityApp.Repository.Seeds;
-using AspNetCoreWebIdentityApp.Web.Services;
+using AspNetCoreWebIdentityApp.Services.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
+using AspNetCoreWebIdentityApp.Service.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,6 +38,8 @@ builder.Services.AddScoped<IClaimsTransformation, UserClaimProvider>();
 builder.Services.AddIdentiyWithExt();
 builder.Services.AddScoped<IAuthorizationHandler, ExchangeExpireRequirementHandler>();
 builder.Services.AddScoped<IAuthorizationHandler, ViolenceRequirementHandler>();
+builder.Services.AddScoped<IMemberService, MemberService>();
+builder.Services.AddScoped<IFileService, FileService>();
 // Define policy
 builder.Services.AddAuthorization(options =>
 {

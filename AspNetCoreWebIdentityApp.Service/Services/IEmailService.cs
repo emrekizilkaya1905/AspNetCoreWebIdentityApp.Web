@@ -1,4 +1,4 @@
-﻿namespace AspNetCoreWebIdentityApp.Web.Services
+﻿namespace AspNetCoreWebIdentityApp.Services.Services
 {
     public interface IEmailService
     {

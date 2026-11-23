@@ -3,7 +3,7 @@ using Microsoft.Extensions.Options;
 using System.Net;
 using System.Net.Mail;
 
-namespace AspNetCoreWebIdentityApp.Web.Services
+namespace AspNetCoreWebIdentityApp.Services.Services
 {
     public class EmailService : IEmailService
     {
