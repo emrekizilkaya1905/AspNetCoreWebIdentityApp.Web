@@ -1,0 +1,58 @@
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
+
+@{
+    ViewData["Title"] = "Orders";
+}
+
+<div class="card border-0 shadow-sm rounded-4 overflow-hidden mt-4">
+    <div class="card-header bg-success text-white border-0 p-4">
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+            <div>
+                <h1 class="h3 mb-1">Orders</h1>
+                <p class="mb-0">View and manage your orders.</p>
+            </div>
+            <a asp-area="" asp-controller="Home" asp-action="Index" class="btn btn-light text-success fw-semibold">Back to Homepage</a>
+        </div>
+    </div>
+    <div class="card-body p-0">
+        <div class="d-flex flex-wrap gap-2 px-4 py-3 border-bottom">
+            @if ((await AuthorizationService.AuthorizeAsync(User, null, "Permissions.Order.Read")).Succeeded)
+            {
+                <button type="button" class="btn btn-outline-success">View Orders</button>
+            }
+            @if ((await AuthorizationService.AuthorizeAsync(User, null, "Permissions.Order.Delete")).Succeeded)
+            {
+                <button type="button" class="btn btn-outline-danger">Delete Order</button>
+            }
+            @if ((await AuthorizationService.AuthorizeAsync(User, null, "Permissions.Stock.Delete")).Succeeded)
+            {
+                <button type="button" class="btn btn-outline-danger">Delete Stock</button>
+            }
+        </div>
+        <div class="px-4 py-3 border-bottom">
+            <h2 class="h6 fw-semibold mb-0">Order List</h2>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th scope="col" class="ps-4 py-3">Order ID</th>
+                        <th scope="col" class="py-3">Customer</th>
+                        <th scope="col" class="py-3">Date</th>
+                        <th scope="col" class="py-3">Status</th>
+                        <th scope="col" class="pe-4 py-3 text-end">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td colspan="5" class="text-center p-5">
+                            <p class="fw-semibold mb-1">No orders to display</p>
+                            <p class="text-muted small mb-0">Order records will appear here when data is available.</p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

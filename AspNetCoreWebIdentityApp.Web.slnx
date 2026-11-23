@@ -1,3 +1,6 @@
 <Solution>
+  <Project Path="AspNetCoreWebIdentityApp.Core/AspNetCoreWebIdentityApp.Core.csproj" Id="c0d8055c-a39c-458c-9bd2-8b45c9893125" />
+  <Project Path="AspNetCoreWebIdentityApp.Repository/AspNetCoreWebIdentityApp.Repository.csproj" Id="59cce968-4dd5-4983-adde-2efaddaffe07" />
+  <Project Path="AspNetCoreWebIdentityApp.Service/AspNetCoreWebIdentityApp.Service.csproj" Id="bb118a2b-d75d-4363-b42d-50098076aadc" />
   <Project Path="AspNetCoreWebIdentityApp.Web/AspNetCoreWebIdentityApp.Web.csproj" />
 </Solution>
